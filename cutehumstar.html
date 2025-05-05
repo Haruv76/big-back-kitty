@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>23223</title>
+    <body>
+      <a href="index.html" class="pixel-button">back to menu</a>
+    <style>    
+      * {
+        box-sizing: border-box;
+        user-select: none;
+      }
+
+      .pixel-button {
+  font-family: 'Press Start 2P', cursive;
+  background-color: #ff69b4;
+  color: rgb(0, 0, 0);
+  border: 4px solid #c84c8e;
+  padding: 12px 24px;
+  font-size: 12px;
+  cursor: pointer;
+  text-transform: uppercase;
+  box-shadow: 4px 4px 0 #d63384;
+  transition: all 0.2s ease;
+
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.pixel-button:hover {
+  background-color: #ff85c1;
+  box-shadow: 2px 2px 0 #c2185b;
+}
+
+.pixel-button:active {
+  transform: translateY(2px);
+  box-shadow: 1px 1px 0 #a01348;
+}
+ 
+      body {
+        padding: 0;
+        margin: 0;
+        font-family: sans-serif;
+        background-color: #48c1bb;
+        overscroll-behavior: contain;
+        --brown: #147623;
+      
+      }
+
+      .wrapper {
+        position: absolute;
+        height: 100dvh;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .wrapper.show-message::after {
+        position: absolute;
+        content: 'drag the donut and feed the kitty';
+        top: 80px;
+        font-style: italic;
+        color: #fff;
+        font-size: 2.2em;
+      }
+
+      .object {
+        position: absolute;
+        width: var(--w);
+        height: var(--h);
+        image-rendering: pixelated;
+      }
+
+      .bear {
+        position: relative;
+        --bg: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAXNSR0IArs4c6QAAAGZJREFUKFNjZMACFJU1/4OE79+9zogujSIAU4iuCFkjXAMuxTDNME1gDYQUI2tiJFYxTBOjhJT8f05OLmx+xxD7/v0bA9gGEIOQJpgauJNAAiCArhFdnHQ/kOxpkoMVFhSEbIJFHABqIC95trMFBwAAAABJRU5ErkJggg==);
+        border-image: var(--bg) 5 fill / 12px / 0 stretch;
+      }
+
+      .round {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAXNSR0IArs4c6QAAAGBJREFUKFNjZMACFJU1/4OE79+9zogujSEAU0yWBmya8NpAUAOyc2BuR/cHig0wDfcaOhiUGirAenBqQFYMMx2bJrANyE4BmU6xBmSnMaJ7FNkGkEKYs2CaSNIA0kSyBgALbj/l8yiDbwAAAABJRU5ErkJggg==);
+        background-size: cover;
+      }
+
+      .cheek {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAXNSR0IArs4c6QAAAEBJREFUKFNjZEADisqa/5GF7t+9zojMh3PQFaIbBNMI1kBIMUwzSBMjsYphmkamBpKDFRZchIIXJeKQY5VQ0gAAjaUglcVqIqEAAAAASUVORK5CYII=);
+        animation: cheek-eat forwards 3.5s;
+        animation-play-state: paused;
+      }
+
+      .mouth {
+        --bg: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAJCAYAAAALpr0TAAAAAXNSR0IArs4c6QAAADxJREFUKFNjZICCh6UT/st15cO4YPpR2UQG+e4CRhAbTIAUwVTAFIMUwQBIMSOyIhTj0DhDQiHRviY2HAHIiSqDjfLRxAAAAABJRU5ErkJggg==);
+        border-image: var(--bg) 4 fill / 10px 9px / 0 stretch;
+      }
+
+      .mouth-wrapper {
+        width: 16px;
+        height: 4px;
+        margin-top: -5px;
+        z-index: 1;
+      }
+
+      .eating .mouth-wrapper {
+        background-image: none;
+        width: 0;
+        height: 0;
+      }
+
+      .eating .mouth {
+        animation: eat infinite 0.4s;
+      }
+
+      .eating .cheek {
+        animation-play-state: running;
+      }
+
+      @keyframes eat {
+        0%, 100% {
+          width: var(--w);
+          height: var(--h);
+        }
+        50% {
+          width: var(--max-w);
+          height: var(--max-h); 
+        }
+      }
+
+      @keyframes cheek-eat {
+        0% {
+          width: var(--w);
+          height: var(--h);
+        }
+        100% {
+          width: var(--max-w);
+          height: var(--max-h);
+        }
+      }
+
+      .inner-face {
+        width: 100%;
+        max-width: 140px;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        margin: 0 auto;
+      }
+
+      .face {
+        position: absolute;
+        --top: 24px;
+        --move-top: 22px;
+        top: var(--top);
+        width: 100%;
+      }
+
+      .eating .ears,
+      .eating .face {
+        animation: face-eat infinite 0.4s;
+      }
+
+      @keyframes face-eat {
+        0%, 100% {
+          top: var(--move-top);
+        }
+        50% {
+          top: var(--top);
+        }
+      }
+
+      .ears {
+        position: absolute;
+        width: 120%;
+        left: -10%;
+        --top: -16px;
+        --move-top: -14px;
+        top: var(--top);
+      }
+
+      .inner-ears {
+        display: flex;
+        justify-content: space-evenly;
+        width: 100%;
+        max-width: 200px;
+        margin: 0 auto;
+      }
+
+      .ear {
+        width: 18px;
+        height: 18px;
+      }
+
+      .cheeks {
+        position: absolute;
+        bottom: -10px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        height: 0;
+      }
+
+      .eye {
+        background-color: var(--brown);
+        width: 4px;
+        height: 8px;
+        z-index: 1;
+      }
+
+      .nose {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAICAYAAADwdn+XAAAAAXNSR0IArs4c6QAAAF9JREFUKFNjZGBgYFBU1vwPotHBu3fvwEJCQkIYcvfvXmcECTLi0gySxGcASB5kCEUGYHUByFaQk2G2w9wOE0P3DoYLcDkblzheL2ALWHQxcEjiC0hChoANINcQUCwAABpSKyXp6ldPAAAAAElFTkSuQmCC);
+        image-rendering: pixelated;
+        background-size: cover;
+        width: 32px;
+        height: 16px;
+        margin-bottom: -16px;
+      }
+
+      .flex-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .hand {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAGCAYAAAAL+1RLAAAAAXNSR0IArs4c6QAAAClJREFUGFdj5BcU/88ABR/fv2QEMcEEDIAUgCRQBEGSIAnCgnDt2CwCADuREnNa/UoxAAAAAElFTkSuQmCC);
+        width: 10px;
+        height: 12px;
+        image-rendering: pixelated;
+        background-size: cover;
+      }
+
+      .flip {
+        transform: scale(-1, 1);
+      }
+
+      .limbs {
+        position: absolute;
+        width: 100%;
+        height: 40px;
+        bottom: -10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .eating .limbs {
+        animation: limbs-eat infinite 0.4s;
+      }
+
+      @keyframes limbs-eat {
+        0%, 100% {
+          height: 40px;
+        }
+        50% {
+          height: 42px;
+        }
+      }
+
+      .limbs > div {
+        display: flex;
+        justify-content: space-around;
+      }
+
+      .foot {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAXNSR0IArs4c6QAAAI5JREFUKFOlkkEKgCAQRTX1GlG0iO5/mGgRRdcQM/7EiA1ai1wIjv//x4xqJVbbjdGYJlW3dda5JB36YYohnHQHg/deOefojPqxL6SlDWJOyYWSDpr+EnMAKCA/DDKxRP1nYGyNRE1zD7VmZUhxSvf4tLLOPmA0JTlWVnAyyFh4k1dDqY9kyC/zd0Fdfo0LGN5QKYoHIGMAAAAASUVORK5CYII=);
+        width: 18px;
+        height: 18px;
+      }
+
+      .food {
+        cursor: grab;
+      }
+
+      .food:active {
+        cursor: grabbing;
+      }
+
+      .donut {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAASCAYAAABB7B6eAAAAAXNSR0IArs4c6QAAAcZJREFUOE+llTEsQ1EUhs+LWSUiYtPBwKIWkhKLJhjstbxECJNYqqIWI1FdxFQhkjfQUWIQSQ0SmrBgYVQTiRhqlso5752b894771XiLG3Pvff/7jn3v7cWtIiduZlm3JS143MrblwdlKL5zCJAshGpUTysmDEN5gOwMInGRHkkDUt3NXeGgDNMggwAxaUwimAYoV4boO4YrA/CWQ+GIIYQQIpXMss0PVvdD9cQgETOTTaAIQRoOmexB3nz+KA2bCw1FMp/FXLQuVWi1lnjtmUFW4MreFKUcFA1CKL1J5tUhQuYv3bX1B0jXqwewGjXsNFKDH77dBtP7eb37ec9aMZADbUCdge7YnqiX23RxdUL5fMLWYDXhG8Ons/bRsoFdBSOyC2Y9B2ucIVGIGEMKS6MYCrAVnAfQ5CA1yWo3D0VaWU8P2wdVSB7zSA+aPL7R5/vDqj98pLSGATA/M/7ZbO2691MABg4dchq5jJ5ZWvVGVsCgBRPr6ahrWfSMhctt70CEsK7DFpQQlD8edYOFYTipfU9us2+pwIhGBoori08hsIYLI7f1ceOQX+BsSgL46f62MkdyudawrQqcLccLZ9rTeC/fzi/neLqUcp/vQ8AAAAASUVORK5CYII=);
+        image-rendering: pixelated;
+        background-size: cover;
+      }
+
+      .donut-eaten-1 {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAASCAYAAABB7B6eAAAAAXNSR0IArs4c6QAAAcpJREFUOE+dlTEsg1EQx++LWSUiYtPBwKIWkhKLJhjstXyJaJjEUkQtRqK6iKlCJB3obhBRg4QmLFh0VBOJGGqWyt333eXe19evjbe07957/9/dvbv3OdDm2FuYq9u2bpxeOGESoYt8EMXXU0mrTva4KHYbrH1AYkmE8mNxWH4oe/NoTewM06CWAPIexftdgGrBDmGrD0MQQ0IBIs4CAUgxsUIrydKhmb5oDRhCAL5AHZoWv3t+suZ/IjbSYP/OpKF7J0epcyZdx9FC2dIRHUhdV2hTM+GgahBEkLNtisIDLN56Z6oFYA8QNt4zKlqR4R9Dt/bSKfP7r0egewoM1DAiMNb9PKJtdmrQmqLLmwrZqYTfIsYevJ/3rZgH6MqcUNmh0bgwVRU2gvSGFleFIBFgKjiPDZBArWtQvneGptITShzvD1NHEehcM4jvgprqc8DoAWu+fKMuDAKg/ffjql7e9zsTAIbOC1RF0rG+Z7bopCwBjKqLr8Who2/akT5I766ChrCXwRLUEBR/nXcbAkLx3OYBdbN0MqYKIThsoLC08BoK42Bx/G88FdzRDGoHxqIsjL8tHzv99muYLQr0lse/nutmH5owUe3IHxNV6VF8uZ/jAAAAAElFTkSuQmCC);
+      }
+
+      .donut-eaten-2 {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAASCAYAAABB7B6eAAAAAXNSR0IArs4c6QAAAaRJREFUOE+1lDFIw1AQhi846yAibmZwUBDqopCISwvq4F6XQEHsJC61oi6OirWLOFUEoaB27yBC3bSgi7roqE4K4pBdKnfJxXvNQWvVt7R5Cd93d+9PLPjnZf0Ffycz10DO6lE1xvu1AOH5hTTVWTis0K8UdSTgihGWTy1+D8H2IxFLfiRgMEMrqSUCpmv75qRtn7pBSdsChLt94wZoMjEWO8KP9Rz0bhUBbB+sKa89gQaX5GYRSU42qYu2OjjOuI3RpGtU6993R9dX7zfmWYR3CrWDQKDFTB7kbHJYTfPZxSPtU4qeeoxn8HxeNhJgUczCJKCRF+2JVGgGjqcBH/QAnstBmrADni/PEc1aKjRBqX+GtrPX9eC2gF/e3QKOLhIwgEWchtKEA9m3oagqdVZiE8G8SIAXn6/njfpuWAUAjJyWKWoEx+rCyrTuolgCgIQ7Kw50DUwHMcUx5baXQUqaO+JrKUH4w7wXawrhxbU980VjCT6tiVqNBu8jGBfD8b/xHnA0sRterWQMZTD+tvzYyXdAyrQusFpeHX2upUwTaFD53BfPE71RK7uIWQAAAABJRU5ErkJggg==);
+      }
+
+      .donut-eaten-3 {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAASCAYAAABB7B6eAAAAAXNSR0IArs4c6QAAAU9JREFUOE9jZKAxYKSG+V0JPv9B5pQt2IJhHsUWgAwvTQ4Hu7N77kowjWwR2RbAXF3qnIoIBIVPcItglpBlAdjVyAajh7PCJ7BvQJaQZcGRkkZwmFvrG2BE4bvKYgah9l4GBoVPDIy2saRbADMc2WR0i8CWLK8H+4JkH1xaVAJ2/adLvHA7jr05zYAtyLr3zibfApDpO/bdAFsCTkUP+FCCa6VzDsOjKn3SLYClHrjBIAay4fKxDAwPF0NSE6k+QE7zIANmibmDDUo7dRzieiTDj168wAAKOqLjgGDShAYQyGAYINkCubaLDOF7p6CENTxZMjAwIBtuWWLJwCzhRnwyhfkAFHkwS0CGX4+IxcgLIMN7KyYRn9FAhluJmGIYhC4AMhgEYIaD2ETFAT4LYIbCDAbRJBV2IMOLO/Jwuh7kWhggu7hGTvvoNmEzFFkNAIy6kFHi4+CMAAAAAElFTkSuQmCC);
+      }
+
+      .donut-eaten-4 {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAASCAYAAABB7B6eAAAAAXNSR0IArs4c6QAAASBJREFUOE9jZKAxYKSx+QxUs6Arwec/zLFlC7bAzaXYApjBpc6pDAwKn8B2dM9dyQCzhCILQIaDDUYHCp/gllBkwf/FG+HBArPjXWUxg1B7L9g3jLaxjGRbcKSkEW64tb4Bih/AliyvB/uCKhYce3OaAVtQde+dTb4FlxaV/N+x7wbY5aXJ4QwMD/hQfLHSOYfhUZU++RaAIxhkMAggGy4fy8DwcDEkNZHrA5jhs8TcwQalnToOsQjJ8KMXLzCAgo6sOMCZPBkYGEAGwwBVLIAnSzTDLUssGZgl3MhPpiBfJO+5wXA9IhYjn4EM762YBM7NZAURzESQJVYipnALQAaDAMxwEJtiC4o78uAWgAwGAZoUdugGw2ylyAeYpRymCABdU3pRwQ9tmAAAAABJRU5ErkJggg==);
+      }
+
+      .donut-eaten-5 {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAASCAYAAABB7B6eAAAAAXNSR0IArs4c6QAAAKdJREFUOE9jZKAxYKSx+QyjFhAMYaoH0VsZlf9zXTTAFpct2MJIVQv+L974H2Twu8piBqHl9Qzdc1dSL5JhhiOHWffe2dSx4P/hxf8ZHvChxMdK5xyGR1X61LGgK8Hnf6lzKsQC+VgGhoeLwUyq+QBuAZLhRy9eYDj25jR1fAByLSwOQAbDAFUtAPnCSsQUxXCqJ1OQJTAbQIaD2FTNB9iy9agFBAs7AM4DPlEZeymqAAAAAElFTkSuQmCC);
+      }
+
+      .donut-crumbs {
+        position: absolute;
+        --bg: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAABxJREFUGFdjZICCM61p/0FMRsICIKUm1bMYYVoAj+EO3fwl+Y4AAAAASUVORK5CYII=);
+        border-image: var(--bg) 2 fill / 4px / 0 stretch;
+        animation: 1s forwards spread;
+      }
+
+      .donut::after {
+        position: absolute;
+        content: '';
+        width: 40px;
+        height: 40px;
+        --bg: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAEdJREFUKFONUFsKACAIa/c/9EJokqaVPyLupRirSBIANOfuiyfQAAcbQCaWijtZcVrrVtHsbzmDorJW14d3fCl2/3OXF0D7CVHNLAu21ivDAAAAAElFTkSuQmCC);
+        border-image: var(--bg) 5 fill / 20px / 0 stretch;
+        image-rendering: pixelated;
+        animation: 0.5s forwards sparkle;
+      }
+
+      @keyframes sparkle {
+        0% {
+          width: 40px;
+          height: 40px;
+          transform: translate(16px, 4px);
+        }
+        95% {
+          width: 80px;
+          height: 80px;
+          transform: translate(-2px, -10px);
+          opacity: 1;
+        }
+        100% {
+        opacity: 0;
+        }
+      }
+
+      @keyframes spread {
+        0% {
+          width: var(--w);
+          height: var(--h);
+        }
+        100% {
+          width: var(--max-w);
+          height: var(--max-h);
+        }
+      }
+
+      .cheek-shrink .cheek {
+        animation: 0.4s forwards shrink;
+        animation-play-state: running;
+      }
+
+      .grow {
+        animation: forwards spread 0.5s;
+        animation-delay: 1s;
+      }
+
+      @keyframes shrink {
+        0% {
+          width: var(--max-w);
+          height: var(--max-h);
+        }
+        100% {
+          width: 20;
+          height: 20;
+        }
+      }
+
+      .sign {
+        position: fixed;
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--brown);
+        bottom: 10px;
+        right: 10px;
+        font-size: 10px;
+        text-transform: none;
+      }
+
+      a {
+        color: var(--brown);
+        text-decoration: none;
+        text-transform: none;
+      }
+
+      a:hover { 
+        text-decoration: underline; 
+      }
+    </style>
+  </head>
+  <body>
+    <body>
+      <div class="wrapper show-message">
+      </div>
+
+      <div class="character">
+        <div class="mouth"></div>
+      </div>
+
+      <audio id="eatingSound" src="roblox-eating.sound.effect.nom.nom.nom.mp3"></audio>
+    
+      <script>  
+        const isNum = x => typeof x === 'number'
+        const px = n => `${n}px`
+        const getPagePos = (e, param) =>
+        e.targetTouches ? e.touches[0][`page${param}`] : e[`page${param}`]
+        const randomN = n => {
+          return Math.round(-n - 0.5 + Math.random() * (2 * n + 1))
+        }
+
+        const wrapper = document.querySelector('.wrapper')
+
+        const addEvents = (target, event, action, array) => {
+          array.forEach(a => target[`${event}EventListener`](a, action))
+        }
+
+        const mouse = {
+          up: (t, e, a) => addEvents(t, e, a, ['mouseup', 'touchend']),
+          move: (t, e, a) => addEvents(t, e, a, ['mousemove', 'touchmove']),
+          down: (t, e, a) => addEvents(t, e, a, ['mousedown', 'touchstart']),
+          enter: (t, e, a) => addEvents(t, e, a, ['mouseenter', 'touchstart']),
+          leave: (t, e, a) => addEvents(t, e, a, ['mouseleave', 'touchmove']),
+        }
+
+        class Vector {
+          constructor(props) {
+            Object.assign(this, {
+              x: 0,
+              y: 0,
+              ...props,
+            })
+          }
+          get magnitude() {
+            return Math.sqrt(this.x * this.x + this.y * this.y)
+          }
+          setLength(length) {
+            const angle = Math.atan2(this.y, this.x)
+            this.x = Math.cos(angle) * length
+            this.y = Math.sin(angle) * length
+          }
+          setXy(xy) {
+            this.x = xy.x
+            this.y = xy.y
+          }
+          addXy(xy) {
+            this.x += xy.x
+            this.y += xy.y
+          }
+          subtractXy(xy) {
+            this.x -= xy.x
+            this.y -= xy.y
+          }
+          multiplyXy(n) {
+            this.x *= n
+            this.y *= n
+          }
+        }
+
+        class WorldObject {
+          constructor(props) {
+            Object.assign(this, {
+              zOffset: 90,
+              moveWithTransform: true,
+              x: 0, y: 0,
+              offset: { x: null, y: null },
+              pos: new Vector({ x: props.x, y: props.y }),
+              size: { w: 0, h: 0 },
+              maxSize: { w: 0, h: 0 },
+              ...props,
+            })
+            this.addToWorld()
+          }
+          get rect() {
+            const { left, top } = this.el.getBoundingClientRect()
+            return {
+              left,
+              top
+            }
+          }
+          get distPos() {
+            const { size: { w, h } } = this
+            return {
+              x: this.rect.left + (w / 2),
+              y: this.rect.top + (h / 2)
+            }
+          }
+          setOffset() {
+            const { offset: { x, y } } = this
+            if (isNum(this.offset.x) && isNum(this.offset.y)) {
+              this.el.style.setProperty('--offset-x', px(x))
+              this.el.style.setProperty('--offset-y', px(y))
+            }
+          }
+          setSize(target = this) {
+            const { size: { w, h }, maxSize: { w: mW, h: mH } } = target
+            this.el.style.setProperty('--w', px(w))
+            this.el.style.setProperty('--h', px(h))
+            this.el.style.setProperty('--max-w', px(mW))
+            this.el.style.setProperty('--max-h', px(mH))
+          }
+          setStyles() {
+            const { pos: { x, y }, z } = this
+            Object.assign(this.el.style, {
+              left: px(x || 0),
+              top: px(y || 0),
+            })
+            this.el.style.zIndex = z || 0
+            this.el.style.transformOrigin = isNum(this.offset.x) & isNum(this.offset.y)
+              ? `${this.offset.x}px ${this.offset.y}px`
+            : `center`
+          }
+          distanceBetween(target) {
+            return Math.round(
+              Math.sqrt(
+                Math.pow(target.distPos.x - this.distPos.x, 2) + Math.pow(target.distPos.y - this.distPos.y, 2)
+              )
+            )
+          }
+          addToWorld() {
+            this.setSize()
+            this.setOffset()
+            if (!this.noPos) this.setStyles()
+            this.container.appendChild(this.el)
+          }
+        }
+
+        class Crumbs extends WorldObject {
+          constructor(props) {
+            super({
+              el: Object.assign(document.createElement('div'), { className: `${props.type}-crumbs object` }),
+              x: 0, y: 0,
+              container: wrapper,
+              ...props,
+            })
+            setTimeout(()=> {
+              this.el.remove()
+              this.food.crumbs = null 
+            }, 1000)
+          }
+        }
+
+        class Food extends WorldObject {
+          constructor(props) {
+            super({
+              el: Object.assign(document.createElement('div'), { className: `food ${props.type} object` }),
+              x: 0, y: 0,
+              grabPos: { a: { x: 0, y: 0 }, b: { x: 0, y: 0 } },
+              container: wrapper,
+              eatCount: 0,
+              eatInterval: null,
+              ...props,
+            })
+            this.addDragEvent()
+            this.setPos()
+          }
+          touchPos(e) {
+            return {
+              x: getPagePos(e, 'X'),
+              y: getPagePos(e, 'Y'),
+            }
+          }
+          addDragEvent() {
+            mouse.down(this.el, 'add', this.onGrab)
+          }
+          drag = (e, x, y) => {
+            if (e.type[0] === 'm') e.preventDefault()
+            this.grabPos.a.x = this.grabPos.b.x - x
+            this.grabPos.a.y = this.grabPos.b.y - y
+            this.pos.subtractXy(this.grabPos.a)
+            this.setStyles()
+          }
+          onGrab = e => {
+            this.grabPos.b = this.touchPos(e)
+            mouse.up(document, 'add', this.onLetGo)
+            mouse.move(document, 'add', this.onDrag)
+          }
+          onDrag = e => {
+            const { x, y } = this.touchPos(e)
+            if (this.canMove) this.drag(e, x, y)
+
+            this.grabPos.b.x = x
+            this.grabPos.b.y = y
+          }
+          onLetGo = () => {
+            mouse.up(document, 'remove', this.onLetGo)
+            mouse.move(document, 'remove', this.onDrag)
+          }
+          eat() {
+            if (!this.eatInterval) {
+              this.eatInterval = setInterval(()=> {
+                if (this.eatCount < 5) {
+                  this.crumbs = new Crumbs({
+                    type: this.type,
+                    size: { w: 0, h: 0 },
+                    maxSize: { w: 40, h: 40 },
+                    x: this.distPos.x + randomN(10),
+                    y: this.pos.y + randomN(10),
+                    food: this
+                  })
+                  this.eatCount++
+                  this.el.className = `food ${this.type} ${this.type}-eaten-${this.eatCount} object`
+                } else {
+                  this.el.remove()
+                  this.bear.food = null
+                  clearInterval(this.eatInterval)
+                  this.eatInterval = null
+                  this.bear.el.className = 'bear object grow'
+                  this.bear.grow()
+                }
+              }, 500)
+            }
+          }
+          setPos() {
+            const { width, height } = wrapper.getBoundingClientRect()
+            this.pos.setXy({
+              x: width / 2 - 36,
+              y: height - (height > 400 ? 200 : 100),
+            })
+            this.setStyles()
+          }
+        }
+
+        class Bear extends WorldObject {
+          constructor(props) {
+            super({
+              ...props,
+              canMove: true,
+              type: 'bear',
+              el: Object.assign(document.createElement('div'), {
+                className: 'bear object',
+                innerHTML: `
+                    <div class="ears">
+                      <div class="inner-ears">
+                        <div class="ear round"></div>
+                        <div class="ear round"></div>
+                      </div>
+                    </div>
+                    <div class="face">
+                      <div class="inner-face">
+                        <div class="eye"></div>
+                        <div class="nose"></div>
+                        <div class="eye"></div>
+                      </div>
+                      <div class="cheeks">
+                        <div class="cheek-wrapper flex-center"></div>
+                        <div class="mouth-wrapper flex-center"></div>
+                        <div class="cheek-wrapper flex-center"></div>
+                      </div>
+                    </div>
+                    <div class="limbs">
+                      <div class="hands">
+                        <div class="hand"></div>
+                        <div class="hand flip"></div>
+                      </div>
+                      <div class="feet">
+                        <div class="foot round"></div>
+                        <div class="foot round"></div>
+                      </div>
+                    </div>
+                  `,
+              })
+            })
+
+            const cheekWrappers = this.el.querySelectorAll('.cheek-wrapper')
+            const mouthWrapper = this.el.querySelector('.mouth-wrapper')
+
+            this.cheeks = [0, 1].map((i)=> new WorldObject({
+              el: Object.assign(document.createElement('div'), { className: 'cheek round object' }),
+              container: cheekWrappers[i],
+              body: this,
+              size: { w: 0, h: 0 },
+              maxSize: { w: 40, h: 40 },
+              noPos: true,
+            }))
+            this.mouth = new WorldObject({
+              el: Object.assign(document.createElement('div'), { className: 'mouth object flex-center' }),
+              container: mouthWrapper,
+              body: this,
+              size: { w: 20, h: 0 },
+              maxSize: { w: 40, h: 30 },
+              noPos: true,
+            })
+
+            mouse.move(document, 'add', () => {
+              if (this.food) {
+                if (this.mouth.distanceBetween(this.food) < 50) {
+                  this.el.classList.add('eating')
+                  wrapper.classList.remove('show-message')
+                  this.food.eat()
+                } else {
+                  this.el.classList.remove('eating')
+                  clearInterval(this.food.eatInterval)
+                  this.food.eatInterval = null
+                }
+              }
+            })
+
+            this.createFood()
+
+            window.addEventListener('resize', ()=> {
+              if (this.food) this.food.setPos()
+            })
+          }
+          grow() {
+            this.el.className = 'bear object grow'
+
+            setTimeout(()=> {
+              this.el.classList.add('cheek-shrink')
+              setTimeout(()=> {
+                this.el.classList.remove ('cheek-shrink')
+                this.createFood()
+              }, 1000)
+            }, 1000)
+
+            setTimeout(()=> {
+              this.size = { ...this.maxSize }
+              this.maxSize = {
+                w: this.size.w + 20,
+                h: this.size.h + 10
+              }
+              this.el.classList.remove('grow')
+              this.setSize()
+            }, 1500)
+          }
+          createFood() {
+            this.food = new Food({ 
+              type: 'donut', 
+              size: { w: 72, h: 54 }, 
+              canMove: true, 
+              bear: this 
+            })
+          }
+        }
+
+        new Bear({
+          container: wrapper, 
+          size: { w: 70, h: 90 },
+          maxSize: { w: 90, h: 100 },
+          offset: { x: null, y: null },
+        });
+      </script>
+    </body>
+  </body>
+</html>
